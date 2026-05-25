@@ -1,0 +1,47 @@
+=====================================================================
+AURASTREAM ENTERPRISE LOGISTICS - MULTI-CATEGORY WAREHOUSE MANUAL
+Document ID: AC-WM-2026-GLOBAL-V3
+Track: Smart Retail Assistant & Supply Chain Guardrails
+=====================================================================
+
+SECTION 1: FURNITURE LOGISTICS & HEAVY ITEMS HANDLING PROTOCOL
+---------------------------------------------------------------------
+1.1 STORAGE GROUND ANCHORING MANDATE
+All inventory assets classified under heavy furniture lines or high-mass structural loads (such as solid wood dining sets, modular couches, metal bed frames, and oak wardrobes) must be securely anchored onto reinforced base ground pallets during all active warehouse storage cycles. Stacking heavy furniture rows without ground pallet stabilization anchors or vertical safety lock pins is strictly prohibited to minimize tipping hazards, structural shelf collapses, and inventory crush damage.
+
+1.2 TWO-MAN AUTHENTICATION TAGGING FOR MOVEMENTS
+Any intra-warehouse stock transfers, bay-to-bay relocations, or large inventory movements involving heavy furniture assets require the physical application and system validation of a two-man authentication tag. Two authorized warehouse equipment operators must sign off and scan their respective unique biometric or RFID authentication IDs before any forklift extraction, overhead crane lift, or mechanical transport of these heavy assets begins. This mechanism ensures absolute tracking provenance and lowers structural workplace hazards.
+
+1.3 OVERHEAD CRANE AND FORKLIFT SPEED RESTRICTIONS
+When moving anchored furniture pallets across open transfer bays, mechanical forklifts must strictly adhere to a maximum speed limit of 5 km/h. Overhead hoists and lifting slings must engage dual-locking carabiners to prevent physical shifts during transit.
+
+SECTION 2: GROCERIES CATEGORY LOGISTICS SHEET & VOLATILITY BUFFERS
+---------------------------------------------------------------------
+2.1 FRESHNESS INSPECTION SCHEDULES & MATURATION TRIAGE
+Perishable inventory assets matching grocery catalog segments, temperature-sensitive organic produce, dairy batches, and chilled meat items must undergo mandatory quality assurance audits. Freshness inspection logs must be systematically executed, digitally timestamped, and completed every Thursday morning without exception. Any food stock batch displaying early chemical degradation, moisture breaches, or packaging failures must be immediately triaged out of active inventory turnover loops into isolation disposal zones.
+
+2.2 SAFE BUFFER STOCK LEVEL THRESHOLDS
+To insulate storefront channels from retail supply chain volatility, seasonal logistics disruptions, and sudden distribution network delays, grocery category shelves must preserve an active baseline safety buffer stock of no less than 50 physical units at all times. If active real-time stock monitoring counters indicate an asset SKU has fallen below 50 shelf units, a critical low-stock system hazard alert must be dispatched instantly to supplier procurement networks to force automated replenishment cycles.
+
+2.3 Cold-CHAIN TEMPERATURE MATRIX CAP
+All dairy, fresh poultry, and frozen item crates must be stored inside specialized blast-chiller bays where ambient temperatures are continuously locked between -2°C and 4°C. Any temperature deviation lasting longer than 15 continuous minutes triggers an automated refrigeration alarm to prevent product spoilage.
+
+SECTION 3: PRODUCT GROUP ELECTRONICS CLEANROOM & LIFECYCLE CONTROLS
+---------------------------------------------------------------------
+3.1 CLIMATE-CONTROLLED DRY LOCKER ENVIRONMENT
+Product Group Electronics (including high-value smart devices, computing chips, sensory hardware, and circuit arrays) requires storage in dedicated climate-controlled lockers. These lockers must be strictly maintained below 25°C ambient temperature and under 40% relative humidity to avoid lithium-ion battery degradation, copper oxidation, and static discharge damage.
+
+3.2 REPEATED OVERNIGHT CONSUMPTION DEPLETION ROUTINES
+Rapid consumption depletion spikes detected over weekends or flash holiday sale events must trigger automated restocking routines. High-demand hardware components must have their replenishment schedules accelerated if regional tracking nodes detect that localized active stock levels are dropping at a velocity exceeding 20% per hour.
+
+SECTION 4: STANDARD RETAIL TRANSACTIONS & RETURN SAFETY POLICIES
+---------------------------------------------------------------------
+4.1 RESTOCKING AND REFUND VALIDATION WINDOW
+All unopened, sealed, or undamaged retail product stock lines returned by customers are eligible for unconditional refunds, exchanges, or store credits. These transactions are handled via the automated register validation system within a strict 30-day transactional validation window starting from the initial point-of-sale timestamp.
+
+4.2 DEFECTIVE MATERIAL ISOLATION LOGS
+Any inventory item returned under the classification of "manufacturing defect" or "hardware failure" must never be routed back to standard operational retail shelves. Defective units must be tagged with a red hazard sticker, logged into the systemic isolation dashboard, and transferred to the quarantine depot within 12 hours to await manufacturer buyback or component recycling.
+
+=====================================================================
+[END OF COMPLIANCE RULES MATRIX - AUTHORIZED SECURE ACCESS ONLY]
+=====================================================================

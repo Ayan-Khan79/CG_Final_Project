@@ -47,12 +47,16 @@ except Exception as conn_fault:
 # =====================================================================
 # NATIVE VECTOR STORAGE INTERFACE (GenAI / RAG Pipeline Core)
 # =====================================================================
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+RAG_MODEL_PATH = os.path.join(BASE_DIR, "models", "native_vector_rag.pkl")
+
 class ProductionVectorStoreRAG:
     """
     Production-grade Vector Store Interface executing native matrix similarity 
     calculations completely offline without remote network dependencies.
     """
-    def __init__(self, file_path="native_vector_rag.pkl"):
+    def __init__(self, file_path=RAG_MODEL_PATH):
         if os.path.exists(file_path):
             self.bundle = joblib.load(file_path)
             self.active = True

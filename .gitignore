@@ -23,13 +23,15 @@ config.json
 .pytest_cache/
 
 # 4. Heavy Data Engineering Binaries & ML Artifacts
-# (Models direct Azure Blob se load hote hain, local files exclude karni hain)
-*.pkl
-*.pickle
+# (Heavy models Azure Blob se aayenge, unhe ignore kiya hai)
 *.joblib
 *.csv
-app/data/warehouse_compliance.txt
-native_vector_rag.pkl
+random_forest_model.pkl  # Sirf heavy model ko specifically ignore karein
+
+# ⚠️ EXCEPTIONS: (Inhe GitHub par bhejna zaroori hai taaki CI/CD Docker image bana sake)
+!native_vector_rag.pkl
+!models/cosmos_vectorizer.pkl
+!app/data/warehouse_compliance.txt
 
 # 5. Operating System Trash Cache & IDE Metadata
 Thumbs.db

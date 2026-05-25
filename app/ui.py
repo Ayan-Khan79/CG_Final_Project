@@ -20,12 +20,22 @@ st.set_page_config(
 )
 
 # Core API endpoints node mappings
-BACKEND_BASE = "http://127.0.0.1:8000/api"
-CHAT_URL = f"{BACKEND_BASE}/agent/chat"
-INGEST_URL = f"{BACKEND_BASE}/ingest"
-PREDICT_URL = f"{BACKEND_BASE}/predict-demand"
-SEARCH_URL = f"{BACKEND_BASE}/search-knowledge"
+# =====================================================================
+# 🔌 DYNAMIC BACKEND ROUTING ENGINE (AUTOMATIC NODE RE-MAPPING)
+# =====================================================================
+# Azure Environment configuration check
+# =====================================================================
+# 🔌 INTERNAL CONTAINER MESH ROUTING ENGINE (BYPASSING EXTERNAL INGRESS)
+# =====================================================================
+# Kyunki dono ek hi container mein hain, Streamlit internally loopback interface
+# par bina external domain ke FastAPI (8000) ko safely reach out kar sakta hai.
+BACKEND_BASE = "https://aurastream-retail-api-hnfwgrdpccdtbwec.koreacentral-01.azurewebsites.net"
 
+# /api/ prefix add kar diya gaya hai (Swagger ke hisab se match kar lena)
+CHAT_URL = f"{BACKEND_BASE}/api/agent/chat"
+INGEST_URL = f"{BACKEND_BASE}/api/ingest"
+PREDICT_URL = f"{BACKEND_BASE}/api/predict-demand"
+SEARCH_URL = f"{BACKEND_BASE}/api/search-knowledge"
 # CSS Framework Injector
 st.markdown("""
     <style>

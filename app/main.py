@@ -7,12 +7,10 @@ import os
 import joblib
 import pandas as pd
 from fastapi import FastAPI, HTTPException, BackgroundTasks
+from fastapi.middleware.cors import CORSMiddleware
 
-# Import schemas from local schemas.py script
-from schemas import IngestionPayload, PredictionPayload, SearchPayload, AgentPayload
-
-# Import our database layers
-from database import rag_engine
+from app.schemas import IngestionPayload, PredictionPayload, SearchPayload, AgentPayload
+from app.database import rag_engine
 
 app = FastAPI(
     title="Smart Retail Assistant Multi-Agent Platform",
@@ -20,8 +18,20 @@ app = FastAPI(
     version="1.0.0"
 )
 
-MODEL_PATH = os.path.join("models", "demand_forecast_model.pkl")
-FEATURES_PATH = os.path.join("models", "model_features.pkl")
+# 🛡️ FIX 1: ABSOLUTE CORS MIDDLEWARE FOR AZURE GATEWAY HANDSHAKE
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# 👑 FIX 2: Dynamic Paths matching both Local Machine & Linux Docker Containers
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "models", "demand_forecast_model.pkl")
+FEATURES_PATH = os.path.join(BASE_DIR, "models", "model_features.pkl")
+
 model = None
 model_features = None
 
@@ -46,7 +56,7 @@ async def ingest_retail_stream(payload: IngestionPayload, background_tasks: Back
     
     def async_cloud_database_commit(data_list):
         try:
-            from database import transactions_collection
+            from app.database import transactions_collection
             import datetime
             
             raw_records = [rec.dict(by_alias=True) for rec in data_list]
@@ -68,15 +78,11 @@ async def ingest_retail_stream(payload: IngestionPayload, background_tasks: Back
 async def run_demand_inference(payload: PredictionPayload):
     global model, model_features
     
-    # 👑 FIXED: Force Absolute Windows Paths to guarantee local caching hits at runtime
-    ABS_MODEL_PATH = r"C:\Users\hp\Desktop\CG_Final_Project\models\demand_forecast_model.pkl"
-    ABS_FEATURES_PATH = r"C:\Users\hp\Desktop\CG_Final_Project\models\model_features.pkl"
-    
-    # Dynamic hot-reload check using bulletproof absolute locations
+    # Check if loaded, else dynamic fallback loading via absolute-relative path
     if model is None or model_features is None:
-        if os.path.exists(ABS_MODEL_PATH) and os.path.exists(ABS_FEATURES_PATH):
-            model = joblib.load(ABS_MODEL_PATH)
-            model_features = joblib.load(ABS_FEATURES_PATH)
+        if os.path.exists(MODEL_PATH) and os.path.exists(FEATURES_PATH):
+            model = joblib.load(MODEL_PATH)
+            model_features = joblib.load(FEATURES_PATH)
             print("⚡ [Runtime Hot-Reload]: Random Forest Model successfully forced into memory cache.")
             
     if model is None or model_features is None:
@@ -86,16 +92,12 @@ async def run_demand_inference(payload: PredictionPayload):
         )
         
     try:
-        # Convert incoming pydantic object back to python dict using by_alias=True
         raw_payload = payload.dict(by_alias=True)
-        
         input_vector = {}
-        # Unpack primary flat parameters safely
         for key, val in raw_payload.items():
             if not isinstance(val, dict):
                 input_vector[key] = val
                 
-        # Unpack flag nested matrices safely
         input_vector.update(payload.category_flags)
         input_vector.update(payload.region_flags)
         input_vector.update(payload.weather_flags)
@@ -122,7 +124,7 @@ async def query_knowledge_base(payload: SearchPayload):
 @app.post("/api/agent/chat", tags=["Multi-Agent Orchestration Framework"])
 async def route_agent_workflow(payload: AgentPayload):
     try:
-        from agents.orchestrator import run_autonomous_orchestration
+        from app.agents.orchestrator import run_autonomous_orchestration
         orchestration_result = await run_autonomous_orchestration(payload.user_query)
         
         return {

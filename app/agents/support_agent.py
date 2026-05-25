@@ -25,7 +25,8 @@ def execute_rag_tool(query: str) -> str:
     cosmos_key = os.getenv("AZURE_COSMOS_KEY")
     database_name = "RetailLogisticsDB"
     container_name = "KnowledgeBase"
-    vectorizer_path = "models/cosmos_vectorizer.pkl"
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    vectorizer_path = os.path.join(BASE_DIR, "models", "cosmos_vectorizer.pkl")
 
     if not cosmos_endpoint or not cosmos_key:
         return "⚠️ Tool Error: Azure Cosmos DB network credentials are missing from .env configuration."

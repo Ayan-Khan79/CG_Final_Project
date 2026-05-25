@@ -1,0 +1,24 @@
+# =====================================================================
+# FILE: .dockerignore (Custom Aligned to Prevent Image Bloat)
+# =====================================================================
+
+# Local Environment Folders (⚠️ Sabse important, ise skip karna hai)
+myvenv/
+venv/
+.env/
+ENV/
+
+# Python Cache & Build Artifacts
+**/__pycache__/
+**/.pytest_cache/
+*.py[cod]
+*.pickle
+
+# Version Control & Local IDE Metadata
+.git/
+.gitignore
+.vscode/
+.idea/
+
+# CI/CD Workflows Directory
+.github/
