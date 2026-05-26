@@ -2,20 +2,18 @@
 # FILE: .gitignore (Custom Aligned to Mohammad Ayan's Local VS Code Matrix)
 # =====================================================================
 
-# 1. Local Virtual Environment Layer (⚠️ CRITICAL FIX)
-# Screenshot ke hisab se aapka environment name 'myvenv' hai
+# 1. Local Virtual Environment Layer
 myvenv/
 venv/
 .env/
 ENV/
 
 # 2. Sensitive Credentials Node
-# Yeh root par dikh rahi `.env` file ko leak hone se rokega
 .env
 *.env
 config.json
 
-# 3. Python Compiled & Testing Cache (Global wildcard settings)
+# 3. Python Compiled & Testing Cache
 **/__pycache__/
 **/.pytest_cache/
 *.py[cod]
@@ -23,12 +21,11 @@ config.json
 .pytest_cache/
 
 # 4. Heavy Data Engineering Binaries & ML Artifacts
-# (Heavy models Azure Blob se aayenge, unhe ignore kiya hai)
 *.joblib
 *.csv
 random_forest_model.pkl  # Sirf heavy model ko specifically ignore karein
 
-# ⚠️ EXCEPTIONS: (Inhe GitHub par bhejna zaroori hai taaki CI/CD Docker image bana sake)
+# ⚠️ EXCEPTIONS
 !native_vector_rag.pkl
 !models/cosmos_vectorizer.pkl
 !app/data/warehouse_compliance.txt

@@ -18,7 +18,7 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# 🛡️ FIX 1: ABSOLUTE CORS MIDDLEWARE FOR AZURE GATEWAY HANDSHAKE
+# ABSOLUTE CORS MIDDLEWARE FOR AZURE GATEWAY HANDSHAKE
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -27,7 +27,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 👑 FIX 2: Dynamic Paths matching both Local Machine & Linux Docker Containers
+# Dynamic Paths matching both Local Machine & Linux Docker Containers
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.path.join(BASE_DIR, "models", "demand_forecast_model.pkl")
 FEATURES_PATH = os.path.join(BASE_DIR, "models", "model_features.pkl")
@@ -42,11 +42,11 @@ def pre_load_ml_pipeline():
         try:
             model = joblib.load(MODEL_PATH)
             model_features = joblib.load(FEATURES_PATH)
-            print("🚀 Success: Random Forest Regressor cached from Cloud Sync. Platform Live.")
+            print("Success: Random Forest Regressor cached from Cloud Sync. Platform Live.")
         except Exception as load_err:
-            print(f"⚠️ Passive Startup Notice: Model files exist but parsing failed: {str(load_err)}")
+            print(f"Passive Startup Notice: Model files exist but parsing failed: {str(load_err)}")
     else:
-        print("ℹ️ System Notice: Prediction binaries not detected yet. Waiting for Azure Blob runtime sync trigger.")
+        print("System Notice: Prediction binaries not detected yet. Waiting for Azure Blob runtime sync trigger.")
 
 # --- API 1: DATA INGESTION PIPELINE ---
 @app.post("/api/ingest", tags=["Data Engineering Pipeline"])
@@ -66,9 +66,9 @@ async def ingest_retail_stream(payload: IngestionPayload, background_tasks: Back
                 record["data_pipeline_origin"] = "AuraStream_ADF_Pipeline"
             
             result = transactions_collection.insert_many(raw_records)
-            print(f"📦 MongoDB Atlas Sync: Successfully committed {len(result.inserted_ids)} records down to cloud storage.")
+            print(f"MongoDB Atlas Sync: Successfully committed {len(result.inserted_ids)} records down to cloud storage.")
         except Exception as write_err:
-            print(f"❌ Cloud Write Failure: Failed to stream metrics to Atlas. Reason: {str(write_err)}")
+            print(f"Cloud Write Failure: Failed to stream metrics to Atlas. Reason: {str(write_err)}")
 
     background_tasks.add_task(async_cloud_database_commit, payload.records)
     return {"status": "success", "message": f"Successfully queued {len(payload.records)} streaming records for cloud persistence."}
@@ -83,7 +83,7 @@ async def run_demand_inference(payload: PredictionPayload):
         if os.path.exists(MODEL_PATH) and os.path.exists(FEATURES_PATH):
             model = joblib.load(MODEL_PATH)
             model_features = joblib.load(FEATURES_PATH)
-            print("⚡ [Runtime Hot-Reload]: Random Forest Model successfully forced into memory cache.")
+            print("[Runtime Hot-Reload]: Random Forest Model successfully forced into memory cache.")
             
     if model is None or model_features is None:
         raise HTTPException(

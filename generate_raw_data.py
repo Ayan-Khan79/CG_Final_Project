@@ -8,7 +8,7 @@ import numpy as np
 import datetime
 
 def build_raw_retail_dataset(output_path="raw_retail_transactions.csv", num_rows=100000):
-    print(f"🔄 Generating {num_rows} raw retail transactional records...")
+    print(f"Generating {num_rows} raw retail transactional records...")
     np.random.seed(42)
     
     start_date = datetime.date(2025, 1, 1)
@@ -44,7 +44,7 @@ def build_raw_retail_dataset(output_path="raw_retail_transactions.csv", num_rows
     })
     
     df.to_csv(output_path, index=False)
-    print(f"✅ Success! Raw dataset dropped at: '{output_path}'")
+    print(f"Success! Raw dataset dropped at: '{output_path}'")
 
 if __name__ == "__main__":
     build_raw_retail_dataset()

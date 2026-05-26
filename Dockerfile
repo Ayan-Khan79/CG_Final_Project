@@ -28,9 +28,8 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Step 7: Copy the rest of your core codebase structures
 COPY . .
 
-# Step 8: Expose networking ports (FastAPI: 8000, Streamlit: 8501)
+# Step 8: Expose networking ports (FastAPI: 8000)
 EXPOSE 8000
-EXPOSE 8501
 
-# Step 9: Launch dual processes simultaneously using background shell execution
+# Step 9: Launch processes
 CMD ["sh", "-c", "PYTHONPATH=.:./app uvicorn app.main:app --host 0.0.0.0 --port 8000"]

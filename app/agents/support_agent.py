@@ -11,9 +11,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from crewai import Agent
 from crewai.tools import tool
 
-# ---------------------------------------------------------------------
-# 🛠️ 1. Standalone Native Azure Cosmos DB RAG Tool Definition
-# ---------------------------------------------------------------------
+
+# 1. Standalone Native Azure Cosmos DB RAG Tool Definition
 @tool("Warehouse Policy RAG Search Tool")
 def execute_rag_tool(query: str) -> str:
     """
@@ -29,7 +28,7 @@ def execute_rag_tool(query: str) -> str:
     vectorizer_path = os.path.join(BASE_DIR, "models", "cosmos_vectorizer.pkl")
 
     if not cosmos_endpoint or not cosmos_key:
-        return "⚠️ Tool Error: Azure Cosmos DB network credentials are missing from .env configuration."
+        return "Tool Error: Azure Cosmos DB network credentials are missing from .env configuration."
 
     try:
         # Connect dynamically to the active Azure Cosmos DB instance
@@ -40,11 +39,11 @@ def execute_rag_tool(query: str) -> str:
         # Pull the complete list of vectorized chunks from the NoSQL container
         items = list(container.read_all_items())
         if not items:
-            return "ℹ️ Tool Notice: The cloud repository container is currently empty."
+            return "Tool Notice: The cloud repository container is currently empty."
 
         # Load the transformation mapping file to shape the user search query
         if not os.path.exists(vectorizer_path):
-            return f"⚠️ Tool Error: Local model file missing at '{vectorizer_path}' path."
+            return f"Tool Error: Local model file missing at '{vectorizer_path}' path."
             
         vectorizer = joblib.load(vectorizer_path)
         query_vector = vectorizer.transform([query]).toarray()
@@ -69,12 +68,10 @@ def execute_rag_tool(query: str) -> str:
         return f"[Cloud Matrix Search Confidence Score: {round(float(best_score), 4)}]\nMatched Context Chunk: '{best_match_text}'"
 
     except Exception as err:
-        return f"❌ Tool execution failed unexpectedly: {str(err)}"
+        return f"Tool execution failed unexpectedly: {str(err)}"
 
 
-# ---------------------------------------------------------------------
-# 🤖 2. Agent Wrapper and Export Lifecycle Block
-# ---------------------------------------------------------------------
+# 2. Agent Wrapper and Export Lifecycle Block
 class DocumentAssistantAgent:
     """Agent #2: Searches unstructured operational text files via Azure Cosmos DB RAG framework."""
     def __init__(self):

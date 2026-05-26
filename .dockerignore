@@ -2,7 +2,7 @@
 # FILE: .dockerignore (Custom Aligned to Prevent Image Bloat)
 # =====================================================================
 
-# Local Environment Folders (⚠️ Sabse important, ise skip karna hai)
+# Local Environment Folders
 myvenv/
 venv/
 .env/

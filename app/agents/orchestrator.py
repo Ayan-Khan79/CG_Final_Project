@@ -23,16 +23,12 @@ crew_azure_llm = LLM(
     temperature=0.2
 )
 
-# ❌ YAHAN SE LOGIC REMOVE KIYA: Top-level standard script initialization block se sync manager ko hata diya hai.
 
 async def run_autonomous_orchestration(user_query: str) -> dict:
     """
     An advanced cognitive multi-agent router with runtime cloud-native asset syncing.
     """
-    # ---------------------------------------------------------------------
-    # 📥 ACTIVE AZURE BLOB STORAGE SYNC LAYER (Moved inside the async loop)
-    # ---------------------------------------------------------------------
-    print("🛰️ [Cloud Asset Audit]: User query received. Checking dynamic target binaries on Azure Blob...")
+    print(" [Cloud Asset Audit]: User query received. Checking dynamic target binaries on Azure Blob...")
     
     try:
         blob_sync_engine = AzureBlobManager()
@@ -46,7 +42,7 @@ async def run_autonomous_orchestration(user_query: str) -> dict:
             local_target_path=r"C:\Users\hp\Desktop\CG_Final_Project\app\data\warehouse_compliance.txt"
         )
     except Exception as sync_err:
-        print(f"⚠️ Non-blocking Sync Exception: {str(sync_err)}. Falling back to local cached files.")
+        print(f" Non-blocking Sync Exception: {str(sync_err)}. Falling back to local cached files.")
 
     # 1. Bind stable Azure LLM to all sub-agents
     document_assistant = document_agent
@@ -56,9 +52,7 @@ async def run_autonomous_orchestration(user_query: str) -> dict:
     anomaly_supervisor = anomaly_agent
     anomaly_supervisor.llm = crew_azure_llm
 
-    # ---------------------------------------------------------------------
-    # 🛡️ Step 2: COGNITIVE INTENT GATEKEEPER (Azure Powered)
-    # ---------------------------------------------------------------------
+    #  Step 2: COGNITIVE INTENT GATEKEEPER (Azure Powered)
     gatekeeper_prompt = (
         f"You are the security gatekeeper for an enterprise retail intelligence platform.\n"
         f"Analyze the incoming user request: '{user_query}'\n\n"
@@ -72,15 +66,15 @@ async def run_autonomous_orchestration(user_query: str) -> dict:
     )
     
     gatekeeper_decision = str(await crew_azure_llm.acall(gatekeeper_prompt)).strip()
-    print(f"👁️ [Gatekeeper Evaluation]: Query classified as -> {gatekeeper_decision}")
+    print(f"[Gatekeeper Evaluation]: Query classified as -> {gatekeeper_decision}")
 
     # --- PATH A: Completely Off-Topic -> Strict Rejection ---
     if "BLOCK" in gatekeeper_decision:
-        print("🛑 [Guardrail Active]: Non-retail query blocked immediately.")
+        print("[Guardrail Active]: Non-retail query blocked immediately.")
         return {
             "handler": "AuraStream Enterprise Guardrail Boundary",
             "output": (
-                "⚠️ Access Denied: The requested query falls outside the operational domain of this system. "
+                " Access Denied: The requested query falls outside the operational domain of this system. "
                 "This Multi-Agent framework is strictly restricted to Retail Logistics, Warehouse Compliance, "
                 "and Demand Forecasting analytics. Please submit an industry-relevant prompt."
             )
@@ -88,7 +82,7 @@ async def run_autonomous_orchestration(user_query: str) -> dict:
 
     # --- PATH B: Valid Retail Industry Question, but No Local Docs ---
     if "GENERAL_RETAIL" in gatekeeper_decision:
-        print("🌍 [Routing Core]: Valid retail query outside local data scope. Answering via Azure Cloud Core...")
+        print("[Routing Core]: Valid retail query outside local data scope. Answering via Azure Cloud Core...")
         fallback_response = await crew_azure_llm.acall(
             f"You are an expert retail industry management consultant. Provide a highly detailed, professional, "
             f"and analytical response to this industry query: {user_query}"
@@ -99,7 +93,7 @@ async def run_autonomous_orchestration(user_query: str) -> dict:
         }
 
     # --- PATH C: Specific Local Data Requests -> Run the Crew Swarm ---
-    print("🤖 [Routing Core]: Local specifications requested. Launching internal CrewAI Swarm Pipeline...")
+    print("[Routing Core]: Local specifications requested. Launching internal CrewAI Swarm Pipeline...")
     
     task_policy = Task(
         description=f"Search the local compliance documents using your RAG tool to address this aspect of the query: '{user_query}'",
@@ -117,14 +111,14 @@ async def run_autonomous_orchestration(user_query: str) -> dict:
         description=(
             f"Review the policy insights collected by the Compliance Auditor and the numeric data from the Data Scientist.\n\n"
             f"Synthesize their outputs into a final, highly professional corporate report that fully answers the user's prompt: '{user_query}'\n\n"
-            f"⚠️ CRITICAL FORMATTING REQUIREMENT:\n"
+            f"CRITICAL FORMATTING REQUIREMENT:\n"
             f"You MUST explicitly attribute the sections of your answer to the agent that provided the data. "
             f"Use the exact markdown header format below for each section:\n"
-            f"### 📄 Answered by: Document Assistant Agent\n"
+            f"### Answered by: Document Assistant Agent\n"
             f"[Insert compliance/RAG insights here]\n\n"
-            f"### 📊 Answered by: ML Expert / Forecasting Agent\n"
+            f"### Answered by: ML Expert / Forecasting Agent\n"
             f"[Insert machine learning demand predictions here]\n\n"
-            f"### 🧠 Answered by: Supply Chain Risk Supervisor\n"
+            f"### Answered by: Supply Chain Risk Supervisor\n"
             f"[Insert your synthesized risk analysis and operational recommendations here]"
         ),
         expected_output="A cohesive operational summary cleanly segmented by the specific agent that generated the insight.",

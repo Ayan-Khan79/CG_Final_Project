@@ -25,7 +25,7 @@ class RetailForecastingAgent:
             self.active = True
         except FileNotFoundError:
             self.active = False
-            print(f"⚠️ {self.name}: Model artifacts not found. Locked in simulation mode.")
+            print(f" {self.name}: Model artifacts not found. Locked in simulation mode.")
 
     @tool("Random Forest Demand Forecasting Tool")
     def execute_prediction_tool(query: str) -> str:

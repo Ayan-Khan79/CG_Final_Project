@@ -20,22 +20,14 @@ st.set_page_config(
 )
 
 # Core API endpoints node mappings
-# =====================================================================
-# 🔌 DYNAMIC BACKEND ROUTING ENGINE (AUTOMATIC NODE RE-MAPPING)
-# =====================================================================
-# Azure Environment configuration check
-# =====================================================================
-# 🔌 INTERNAL CONTAINER MESH ROUTING ENGINE (BYPASSING EXTERNAL INGRESS)
-# =====================================================================
-# Kyunki dono ek hi container mein hain, Streamlit internally loopback interface
-# par bina external domain ke FastAPI (8000) ko safely reach out kar sakta hai.
+# DYNAMIC BACKEND ROUTING ENGINE (AUTOMATIC NODE RE-MAPPING)
 BACKEND_BASE = "https://aurastream-retail-api-hnfwgrdpccdtbwec.koreacentral-01.azurewebsites.net"
 
-# /api/ prefix add kar diya gaya hai (Swagger ke hisab se match kar lena)
 CHAT_URL = f"{BACKEND_BASE}/api/agent/chat"
 INGEST_URL = f"{BACKEND_BASE}/api/ingest"
 PREDICT_URL = f"{BACKEND_BASE}/api/predict-demand"
 SEARCH_URL = f"{BACKEND_BASE}/api/search-knowledge"
+
 # CSS Framework Injector
 st.markdown("""
     <style>
@@ -49,37 +41,35 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# ---------------------------------------------------------------------
-# 🎛️ SIDEBAR CONTROL PANEL
-# ---------------------------------------------------------------------
+
+# SIDEBAR CONTROL PANEL
 with st.sidebar:
     st.image("https://img.icons8.com/fluent/96/000000/artificial-intelligence.png", width=70)
     st.title("AuraStream AI")
     st.markdown("### **System Telemetry Network**")
     st.write("---")
-    st.markdown("🟢 **FastAPI Core**: `Active`")
-    st.markdown("🔌 **MongoDB Atlas**: `Linked`")
-    st.markdown("🧠 **CrewAI Matrix**: `3 Agents Active`")
-    st.markdown("🛡️ **Cognitive Guardrail**: `Armed`")
+    st.markdown("**FastAPI Core**: `Active`")
+    st.markdown("**MongoDB Atlas**: `Linked`")
+    st.markdown("**CrewAI Matrix**: `3 Agents Active`")
+    st.markdown("**Cognitive Guardrail**: `Armed`")
     st.write("---")
     st.caption("**Host**: Local Virtual Machine (`myvenv`)")
 
-st.title("🚀 Smart Retail Assistant Platform")
+st.title("Smart Retail Assistant Platform")
 st.markdown("Production-grade workspace mapped across all core capstone REST API nodes.")
 
 # Setup global container Tabs
 tabs = st.tabs([
-    "💬 Multi-Agent Chat Swarm", 
-    "📥 Live Stream Ingestion", 
-    "📊 ML Predictive Inference", 
-    "🔍 Document Knowledge Base"
+    "Multi-Agent Chat Swarm", 
+    "Live Stream Ingestion", 
+    "ML Predictive Inference", 
+    "Document Knowledge Base"
 ])
 
-# =====================================================================
+
 # TAB 1: AI MULTI-AGENT CHAT SWARM
-# =====================================================================
 with tabs[0]:
-    st.header("💬 Autonomous Multi-Agent Matrix")
+    st.header("Autonomous Multi-Agent Matrix")
     
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = []
@@ -88,11 +78,11 @@ with tabs[0]:
         with st.chat_message(chat["role"]):
             if chat["role"] == "assistant":
                 if "Swarm Matrix" in chat["handler"]:
-                    st.markdown(f"<span class='badge-swarm'>⚙️ Handler: {chat['handler']}</span>", unsafe_allow_html=True)
+                    st.markdown(f"<span class='badge-swarm'> Handler: {chat['handler']}</span>", unsafe_allow_html=True)
                 elif "Knowledge Core" in chat["handler"]:
-                    st.markdown(f"<span class='badge-cloud'>🌍 Handler: {chat['handler']}</span>", unsafe_allow_html=True)
+                    st.markdown(f"<span class='badge-cloud'> Handler: {chat['handler']}</span>", unsafe_allow_html=True)
                 else:
-                    st.markdown(f"<span class='badge-guard'>🛡️ Handler: {chat['handler']}</span>", unsafe_allow_html=True)
+                    st.markdown(f"<span class='badge-guard'> Handler: {chat['handler']}</span>", unsafe_allow_html=True)
                 st.markdown("<div style='margin-top: 8px;'></div>", unsafe_allow_html=True)
             st.markdown(chat["text"])
 
@@ -102,7 +92,7 @@ with tabs[0]:
             st.markdown(user_input)
             
         with st.chat_message("assistant"):
-            with st.spinner("🧠 Routing query loops across cognitive bounds..."):
+            with st.spinner(" Routing query loops across cognitive bounds..."):
                 try:
                     payload = {"user_query": user_input, "session_id": "streamlit_session"}
                     response = requests.post(CHAT_URL, json=payload, timeout=300)
@@ -112,11 +102,11 @@ with tabs[0]:
                         agent_reply = data.get("agent_response", "Empty stream.")
                         
                         if "Swarm Matrix" in handler_tag:
-                            st.markdown(f"<span class='badge-swarm'>⚙️ Handler: {handler_tag}</span>", unsafe_allow_html=True)
+                            st.markdown(f"<span class='badge-swarm'> Handler: {handler_tag}</span>", unsafe_allow_html=True)
                         elif "Knowledge Core" in handler_tag:
-                            st.markdown(f"<span class='badge-cloud'>🌍 Handler: {handler_tag}</span>", unsafe_allow_html=True)
+                            st.markdown(f"<span class='badge-cloud'> Handler: {handler_tag}</span>", unsafe_allow_html=True)
                         else:
-                            st.markdown(f"<span class='badge-guard'>🛡️ Handler: {handler_tag}</span>", unsafe_allow_html=True)
+                            st.markdown(f"<span class='badge-guard'> Handler: {handler_tag}</span>", unsafe_allow_html=True)
                         
                         st.markdown("<div style='margin-top: 8px;'></div>", unsafe_allow_html=True)
                         st.markdown(agent_reply)
@@ -126,11 +116,9 @@ with tabs[0]:
                 except Exception as e:
                     st.error(f"Communication Failure: {str(e)}")
 
-# =====================================================================
 # TAB 2: LIVE STREAM INGESTION (SLIDERS & FORMS)
-# =====================================================================
 with tabs[1]:
-    st.header("📥 Real-Time Transaction Ingestion Engine")
+    st.header(" Real-Time Transaction Ingestion Engine")
     st.markdown("Simulates data generation feeding directly into the MongoDB Atlas Cluster.")
     
     with st.form("ingest_form"):
@@ -168,12 +156,12 @@ with tabs[1]:
                 "seasonality_flags": {"Season_Spring": 1, "Season_Summer": 0, "Season_Fall": 0, "Season_Winter": 0}
             }
             
-            with st.spinner("📦 Shipping records down to MongoDB cloud array clusters..."):
+            with st.spinner("Shipping records down to MongoDB cloud array clusters..."):
                 try:
                     payload = {"records": [mock_record]}
                     res = requests.post(INGEST_URL, json=payload)
                     if res.status_code == 200:
-                        st.success(f"✅ Cloud Persistence Resolved: {res.json().get('message')}")
+                        st.success(f"Cloud Persistence Resolved: {res.json().get('message')}")
                         # Temporarily cache to session state so Tab 3 can automatically grab choices
                         st.session_state["last_ingested_record"] = mock_record
                     else:
@@ -181,17 +169,15 @@ with tabs[1]:
                 except Exception as ex:
                     st.error(f"Failed connecting to server: {str(ex)}")
 
-# =====================================================================
 # TAB 3: LIVE ML FORECASTING (ZERO REDUNDANCY DROPDOWN SELECT)
-# =====================================================================
 with tabs[2]:
-    st.header("📊 Production Machine Learning Analytics Core")
+    st.header("Production Machine Learning Analytics Core")
     st.markdown("Fetches active document payloads to execute predictive Random Forest metrics.")
     
     # Check if a transaction is currently in session memory to bypass manual entries entirely!
     if "last_ingested_record" in st.session_state:
         rec = st.session_state["last_ingested_record"]
-        st.info(f"💡 Detected Active Cloud Session Item: **Store {rec['Store ID']} | SKU {rec['Product ID']}**")
+        st.info(f"Detected Active Cloud Session Item: **Store {rec['Store ID']} | SKU {rec['Product ID']}**")
         
         # Display summary mapping to user
         st.json({
@@ -201,23 +187,22 @@ with tabs[2]:
         })
         
         if st.button("Trigger Machine Learning Model Inference"):
-            with st.spinner("⚡ Activating cached Random Forest compilation nodes..."):
+            with st.spinner(" Activating cached Random Forest compilation nodes..."):
                 try:
                     res = requests.post(PREDICT_URL, json=rec)
                     if res.status_code == 200:
                         pred_units = res.json().get("predicted_units_sold")
-                        st.metric(label="🎯 Aligned Model Projection Output", value=f"{pred_units} Units Sold")
+                        st.metric(label=" Aligned Model Projection Output", value=f"{pred_units} Units Sold")
                         st.success("Mathematical execution sequence complete.")
                     else:
                         st.error(res.text)
                 except Exception as ex:
                     st.error(str(ex))
     else:
-        st.warning("⚠️ No active transaction record loaded. Go to 'Live Stream Ingestion' and push a record to MongoDB first to test this seamlessly!")
+        st.warning(" No active transaction record loaded. Go to 'Live Stream Ingestion' and push a record to MongoDB first to test this seamlessly!")
 
-# =====================================================================
+
 # TAB 4: DOCUMENT KNOWLEDGE BASE (SEPARATE RAG MATRIX TESTER)
-# =====================================================================
 with tabs[3]:
     st.header("🔍 Isolated Document Semantic Search Node")
     st.markdown("Tests structural vector chunks matching within the database schemas.")

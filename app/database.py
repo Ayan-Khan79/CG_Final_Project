@@ -38,10 +38,10 @@ try:
     
     # Test network routing via diagnostic administrative ping
     mongo_client.admin.command('ping')
-    print("🔌 MongoDB Atlas Cloud Status: Secure Link Active via .env parameters.")
+    print("MongoDB Atlas Cloud Status: Secure Link Active via .env parameters.")
 
 except Exception as conn_fault:
-    print(f"❌ Database Connectivity Fault: Network connection refused. Details:\n{str(conn_fault)}")
+    print(f"Database Connectivity Fault: Network connection refused. Details:\n{str(conn_fault)}")
 
 
 # =====================================================================
@@ -60,10 +60,10 @@ class ProductionVectorStoreRAG:
         if os.path.exists(file_path):
             self.bundle = joblib.load(file_path)
             self.active = True
-            print(f"🧠 GenAI Layer: Native Vector Index loaded. Registered Chunks: {len(self.bundle['documents'])}")
+            print(f"GenAI Layer: Native Vector Index loaded. Registered Chunks: {len(self.bundle['documents'])}")
         else:
             self.active = False
-            print("⚠️ GenAI Layer Warning: 'native_vector_rag.pkl' missing! Please execute 'seed_vector_db.py' first.")
+            print("GenAI Layer Warning: 'native_vector_rag.pkl' missing! Please execute 'seed_vector_db.py' first.")
 
     def search_similarity(self, user_query: str, top_k: int = 1) -> List[Dict[str, Any]]:
         """Executes high-performance local Cosine Similarity lookups over document matrices."""

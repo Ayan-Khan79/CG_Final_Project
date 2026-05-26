@@ -7,15 +7,13 @@ import pytest
 import datetime
 from fastapi.testclient import TestClient
 
-# 🛠️ FIX: Correct import path to point to the app folder
+# Correct import path to point to the app folder
 from app.main import app 
 
 # Instantiate the standard structural test node client
 client = TestClient(app)
 
-# ---------------------------------------------------------------------
-# 🧪 TEST 1: CHAT ORCHESTRATOR COGNITIVE GUARDRAIL GATE (API 4)
-# ---------------------------------------------------------------------
+# TEST 1: CHAT ORCHESTRATOR COGNITIVE GUARDRAIL GATE (API 4)
 def test_agent_chat_endpoint_block_guardrail():
     """Verifies that the cognitive guardrail catches and rejects out-of-domain queries."""
     payload = {
@@ -24,7 +22,7 @@ def test_agent_chat_endpoint_block_guardrail():
     }
     response = client.post("/api/agent/chat", json=payload)
     
-    # 🛠️ FIX: Allow 500 in test if CrewAI isn't configured in test env, or expect 200
+    #Allow 500 in test if CrewAI isn't configured in test env, or expect 200
     assert response.status_code in [200, 500] 
     if response.status_code == 200:
         data = response.json()
@@ -33,9 +31,7 @@ def test_agent_chat_endpoint_block_guardrail():
         assert data["orchestration_status"] == "workflow_resolved"
 
 
-# ---------------------------------------------------------------------
-# 🧪 TEST 2: DOCUMENT KNOWLEDGE SEARCH ENDPOINT (API 3)
-# ---------------------------------------------------------------------
+# TEST 2: DOCUMENT KNOWLEDGE SEARCH ENDPOINT (API 3)
 def test_search_knowledge_endpoint():
     """Verifies vector RAG response schema properties and data structures."""
     payload = {
@@ -51,9 +47,9 @@ def test_search_knowledge_endpoint():
     assert isinstance(data["matched_chunks"], list)
 
 
-# ---------------------------------------------------------------------
-# 🧪 TEST 3: REAL-TIME TRANSACTION INGESTION PIPELINE (API 1)
-# ---------------------------------------------------------------------
+
+# TEST 3: REAL-TIME TRANSACTION INGESTION PIPELINE (API 1)
+
 def test_data_ingestion_pipeline_success():
     """Validates full Pydantic mapping constraints and asynchronous push triggers."""
     now = datetime.datetime.now()
@@ -79,9 +75,7 @@ def test_data_ingestion_pipeline_success():
     assert "queued" in data["message"]
 
 
-# ---------------------------------------------------------------------
-# 🧪 TEST 4: INGESTION PIPELINE DATA VALIDATION CRASH (API 1 - Fail Case)
-# ---------------------------------------------------------------------
+# TEST 4: INGESTION PIPELINE DATA VALIDATION CRASH (API 1 - Fail Case)
 def test_data_ingestion_validation_error():
     """Ensures Pydantic catch blocks intercept faulty structures (Missing Date)."""
     # Malformed record without mandatory 'Date' field string
