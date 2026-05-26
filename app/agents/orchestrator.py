@@ -1,20 +1,17 @@
-# =====================================================================
-# FILE: app/agents/orchestrator.py
-# Purpose: Master Autonomous Swarm Orchestrator (Multi-Task Async Engine)
-# =====================================================================
+"""
+Master Autonomous Swarm Orchestrator
+Handles routing, cloud asset synchronization, and CrewAI task delegation.
+"""
 
 import os
 from crewai import Crew, Process, Task, LLM
 
-# Import your isolated agent files natively from your package folder
 from agents.anomaly_agent import anomaly_agent
 from agents.forecasting_agent import forecasting_agent
 from agents.support_agent import document_agent
-
-# Bring in your decoupled cloud asset utility manager
 from azure_storage import AzureBlobManager
 
-# Configure the Native CrewAI Azure LLM Wrapper Explicitly
+# Initialize the Azure LLM endpoint
 crew_azure_llm = LLM(
     model=f"azure/{os.getenv('AZURE_OPENAI_DEPLOYMENT_NAME', 'gpt-4o')}",
     api_key=os.getenv("AZURE_OPENAI_API_KEY"),
@@ -23,16 +20,14 @@ crew_azure_llm = LLM(
     temperature=0.2
 )
 
-
 async def run_autonomous_orchestration(user_query: str) -> dict:
     """
-    An advanced cognitive multi-agent router with runtime cloud-native asset syncing.
+    Cognitive multi-agent router with runtime cloud-native asset syncing.
     """
-    print(" [Cloud Asset Audit]: User query received. Checking dynamic target binaries on Azure Blob...")
+    print("INFO: User query received. Synchronizing dynamic target binaries on Azure Blob.")
     
     try:
         blob_sync_engine = AzureBlobManager()
-        # Direct cloud fetch safely locked into the scoped execution flow
         blob_sync_engine.sync_asset_from_cloud(
             blob_name="forecasting_model.pkl", 
             local_target_path=r"C:\Users\hp\Desktop\CG_Final_Project\models\demand_forecast_model.pkl"
@@ -42,9 +37,9 @@ async def run_autonomous_orchestration(user_query: str) -> dict:
             local_target_path=r"C:\Users\hp\Desktop\CG_Final_Project\app\data\warehouse_compliance.txt"
         )
     except Exception as sync_err:
-        print(f" Non-blocking Sync Exception: {str(sync_err)}. Falling back to local cached files.")
+        print(f"WARN: Non-blocking Sync Exception: {str(sync_err)}. Falling back to local cached files.")
 
-    # 1. Bind stable Azure LLM to all sub-agents
+    # Bind stable Azure LLM to all sub-agents
     document_assistant = document_agent
     document_assistant.llm = crew_azure_llm
     forecasting_expert = forecasting_agent
@@ -52,57 +47,57 @@ async def run_autonomous_orchestration(user_query: str) -> dict:
     anomaly_supervisor = anomaly_agent
     anomaly_supervisor.llm = crew_azure_llm
 
-    #  Step 2: COGNITIVE INTENT GATEKEEPER (Azure Powered)
+    # INTENT GATEKEEPER - Updated for broader retail scope
     gatekeeper_prompt = (
         f"You are the security gatekeeper for an enterprise retail intelligence platform.\n"
         f"Analyze the incoming user request: '{user_query}'\n\n"
         f"Classify the request into EXACTLY one of these three token strings:\n"
-        f"1. LOCAL_SWARM -> If the query specifically asks about internal warehouse safety protocols, "
-        f"compliance manuals, or numeric sales demand curve projections/calculations.\n"
+        f"1. LOCAL_SWARM -> If the query asks about internal warehouse safety, compliance manuals, "
+        f"inventory levels, current stock, or numeric sales demand projections.\n"
         f"2. GENERAL_RETAIL -> If the query is related to the retail industry, supply chain management, "
-        f"marketing, e-commerce, or business strategies in general, but does NOT ask for local specs or metrics.\n"
-        f"3. BLOCK -> If the query is entirely unrelated to retail, commerce, or logistics (e.g., sports, general science, coding, video games).\n\n"
+        f"marketing, or e-commerce in general, but does NOT ask for local specs or metrics.\n"
+        f"3. BLOCK -> If the query is entirely unrelated to retail, commerce, or logistics (e.g., sports, coding, video games).\n\n"
         f"Output ONLY the token string. Do not include formatting, markdown, or extra words."
     )
     
     gatekeeper_decision = str(await crew_azure_llm.acall(gatekeeper_prompt)).strip()
-    print(f"[Gatekeeper Evaluation]: Query classified as -> {gatekeeper_decision}")
+    print(f"INFO: Gatekeeper Evaluation -> {gatekeeper_decision}")
 
-    # --- PATH A: Completely Off-Topic -> Strict Rejection ---
+    # PATH A: Strictly Off-Topic Rejection
     if "BLOCK" in gatekeeper_decision:
-        print("[Guardrail Active]: Non-retail query blocked immediately.")
+        print("INFO: Guardrail Active. Non-retail query blocked immediately.")
         return {
-            "handler": "AuraStream Enterprise Guardrail Boundary",
+            "handler": "Enterprise Guardrail Boundary",
             "output": (
-                " Access Denied: The requested query falls outside the operational domain of this system. "
-                "This Multi-Agent framework is strictly restricted to Retail Logistics, Warehouse Compliance, "
+                "Access Denied: The requested query falls outside the operational domain of this system. "
+                "This framework is restricted to Retail Logistics, Inventory, Warehouse Compliance, "
                 "and Demand Forecasting analytics. Please submit an industry-relevant prompt."
             )
         }
 
-    # --- PATH B: Valid Retail Industry Question, but No Local Docs ---
+    # PATH B: Valid Retail Industry Question (No Local Data Required)
     if "GENERAL_RETAIL" in gatekeeper_decision:
-        print("[Routing Core]: Valid retail query outside local data scope. Answering via Azure Cloud Core...")
+        print("INFO: Routing Core - Valid general retail query. Routing to Azure Cloud Core.")
         fallback_response = await crew_azure_llm.acall(
-            f"You are an expert retail industry management consultant. Provide a highly detailed, professional, "
-            f"and analytical response to this industry query: {user_query}"
+            f"You are an expert retail industry management consultant. Provide a professional, "
+            f"analytical response to this industry query: {user_query}"
         )
         return {
-            "handler": "Azure AI Foundry Retail Knowledge Core",
+            "handler": "Azure Knowledge Core",
             "output": str(fallback_response).strip()
         }
 
-    # --- PATH C: Specific Local Data Requests -> Run the Crew Swarm ---
-    print("[Routing Core]: Local specifications requested. Launching internal CrewAI Swarm Pipeline...")
+    # PATH C: Specific Local Data Requests (Crew Swarm Pipeline)
+    print("INFO: Routing Core - Local specifications requested. Launching CrewAI Swarm Pipeline.")
     
     task_policy = Task(
-        description=f"Search the local compliance documents using your RAG tool to address this aspect of the query: '{user_query}'",
-        expected_output="Extracted warehouse safety regulations or compliance protocols relevant to the query.",
+        description=f"Search the local compliance documents using your RAG tool to address this query: '{user_query}'",
+        expected_output="Extracted warehouse safety regulations, compliance protocols, or context relevant to the query.",
         agent=document_assistant
     )
 
     task_forecast = Task(
-        description=f"Execute your forecasting tool to analyze inventory metrics or product turnover velocities for: '{user_query}'",
+        description=f"Execute your forecasting tool to analyze inventory metrics, stock, or product turnover for: '{user_query}'",
         expected_output="Numeric demand prediction results and analytical model outputs.",
         agent=forecasting_expert
     )
@@ -110,10 +105,9 @@ async def run_autonomous_orchestration(user_query: str) -> dict:
     task_synthesis = Task(
         description=(
             f"Review the policy insights collected by the Compliance Auditor and the numeric data from the Data Scientist.\n\n"
-            f"Synthesize their outputs into a final, highly professional corporate report that fully answers the user's prompt: '{user_query}'\n\n"
+            f"Synthesize their outputs into a final corporate report that answers the user's prompt: '{user_query}'\n\n"
             f"CRITICAL FORMATTING REQUIREMENT:\n"
-            f"You MUST explicitly attribute the sections of your answer to the agent that provided the data. "
-            f"Use the exact markdown header format below for each section:\n"
+            f"Explicitly attribute the sections to the agent that provided the data using this format:\n"
             f"### Answered by: Document Assistant Agent\n"
             f"[Insert compliance/RAG insights here]\n\n"
             f"### Answered by: ML Expert / Forecasting Agent\n"
@@ -121,7 +115,7 @@ async def run_autonomous_orchestration(user_query: str) -> dict:
             f"### Answered by: Supply Chain Risk Supervisor\n"
             f"[Insert your synthesized risk analysis and operational recommendations here]"
         ),
-        expected_output="A cohesive operational summary cleanly segmented by the specific agent that generated the insight.",
+        expected_output="A cohesive operational summary segmented by the specific agent.",
         agent=anomaly_supervisor
     )
 
@@ -134,6 +128,6 @@ async def run_autonomous_orchestration(user_query: str) -> dict:
 
     crew_output_object = await retail_swarm.kickoff_async()
     return {
-        "handler": "CrewAI Autonomous Swarm Matrix",
+        "handler": "Autonomous Swarm Matrix",
         "output": str(crew_output_object).strip()
     }
